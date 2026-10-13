@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | QR Code Generator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff, #f5f3ff);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 420px;
+            padding: 38px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(49, 46, 129, 0.12);
+        }
+.logo {
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 14px;
+    display: block;
+    object-fit: contain;
+    border-radius: 14px;
+}
+        h1 {
+            text-align: center;
+            color: #172554;
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px #4f46e51a;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 24px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(90deg, #4338ca, #4f46e5);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3730a3;
+        }
+
+        .message {
+            margin: 10px 0;
+            color: #b91c1c;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        a {
+            color: #4338ca;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+
+        <img
+    src="{{ url_for('static', filename='logo.png') }}"
+    alt="QR Code Generator Logo"
+    class="logo"
+>
+
+        <h1>Welcome Back</h1>
+
+        <p class="subtitle">
+            Sign in to generate and download your QR codes.
+        </p>
+
+        {% for message in get_flashed_messages() %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" action="{{ url_for('login') }}">
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                autocomplete="email"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <div class="footer">
+            Don't have an account?
+            <a href="{{ url_for('register') }}">Create an account</a>
+        </div>
+
+    </div>
+</body>
+</html>

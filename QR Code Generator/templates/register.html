@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | QR Code Generator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #e0e7ff, #f5f3ff);
+        }
+
+        .card {
+            width: 100%;
+            max-width: 440px;
+            padding: 36px;
+            border-radius: 20px;
+            background: white;
+            box-shadow: 0 15px 45px rgba(49, 46, 129, 0.12);
+        }
+
+        .brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            color: #312e81;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 28px;
+        }
+
+        .logo {
+            width: 43px;
+            height: 43px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4338ca, #6366f1);
+            color: white;
+            font-size: 28px;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            text-align: center;
+            color: #172554;
+            font-size: 27px;
+        }
+
+        .subtitle {
+            margin: 0 0 25px;
+            text-align: center;
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            margin: 16px 0 8px;
+            color: #334155;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px #4338ca18;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(90deg, #4338ca, #4f46e5);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3730a3;
+        }
+
+        .message {
+            margin: 12px 0;
+            text-align: center;
+            color: #b91c1c;
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        a {
+            color: #4338ca;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 26px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="card">
+
+        <div class="brand">
+            <div class="logo" aria-label="QR logo">▦</div>
+            <span>QR Code Generator</span>
+        </div>
+
+        <h1>Create Account</h1>
+
+        <p class="subtitle">
+            Create your account to generate and download QR codes.
+        </p>
+
+        {% for message in get_flashed_messages() %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+
+        <form method="POST" action="{{ url_for('register') }}">
+
+            <label for="name">Full Name</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your full name"
+                autocomplete="name"
+                required
+            >
+
+            <label for="email">Email Address</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email address"
+                autocomplete="email"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="At least 8 characters"
+                minlength="8"
+                autocomplete="new-password"
+                required
+            >
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="footer">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Login</a>
+        </div>
+
+    </main>
+</body>
+</html>

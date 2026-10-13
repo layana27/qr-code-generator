@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef2ff, #f8faff);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+
+        header {
+            background: white;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .brand h2 {
+            font-size: 20px;
+            color: #4338ca;
+        }
+
+        .logout {
+            text-decoration: none;
+            color: white;
+            background: #4f46e5;
+            padding: 10px 18px;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 45px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #64748b;
+        }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .panel {
+            background: white;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 30px rgba(30,41,59,0.07);
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+            font-size: 21px;
+        }
+
+        label {
+            display: block;
+            margin: 18px 0 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 15px;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: 2px solid #818cf8;
+            border-color: #6366f1;
+        }
+
+        button {
+            width: 100%;
+            border: none;
+            background: #4f46e5;
+            color: white;
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #3730a3;
+        }
+
+        .preview {
+            min-height: 270px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #c7d2fe;
+            border-radius: 14px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #qrcode {
+            margin: 10px auto;
+        }
+
+        #qrcode img,
+        #qrcode canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #status {
+            margin-top: 15px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .download {
+            display: none;
+            text-decoration: none;
+            text-align: center;
+            background: #059669;
+            color: white;
+            padding: 13px;
+            border-radius: 10px;
+            margin-top: 18px;
+            font-weight: bold;
+        }
+
+        .download:hover {
+            background: #047857;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 25px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 750px) {
+            .workspace {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 15px 5%;
+            }
+
+            .brand h2 {
+                font-size: 16px;
+            }
+
+            .container {
+                margin-top: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="brand">
+        <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            alt="QR Code Generator Logo"
+            class="logo"
+        >
+        <h2>QR Code Generator</h2>
+    </div>
+
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h1>Welcome to Your Dashboard!</h1>
+        <p>Generate and download QR codes quickly and easily.</p>
+    </section>
+
+    <div class="workspace">
+
+        <section class="panel">
+            <h2>Generate QR Code</h2>
+
+            <label for="qrText">Enter text or website URL</label>
+
+            <textarea
+                id="qrText"
+                placeholder="Type your text or paste a website link here..."
+            ></textarea>
+
+            <button type="button" onclick="generateQR()">
+                Generate QR Code
+            </button>
+
+            <p id="status" role="status">
+                Enter your text to get started.
+            </p>
+        </section>
+
+        <section class="panel">
+            <h2>Your QR Code</h2>
+
+            <div class="preview">
+                <div id="qrcode"></div>
+                <p id="placeholder">
+                    Your generated QR code will appear here.
+                </p>
+            </div>
+
+            <a id="downloadBtn" class="download" download="my-qr-code.png">
+                Download QR Code
+            </a>
+        </section>
+
+    </div>
+</main>
+
+<footer>
+    QR Code Generator with User Authentication
+</footer>
+
+<script>
+    let qrInstance = null;
+
+    function generateQR() {
+        const text = document.getElementById("qrText").value.trim();
+        const qrContainer = document.getElementById("qrcode");
+        const status = document.getElementById("status");
+        const downloadBtn = document.getElementById("downloadBtn");
+        const placeholder = document.getElementById("placeholder");
+
+        if (!text) {
+            status.textContent = "Please enter some text or a website URL.";
+            return;
+        }
+
+        if (typeof QRCode === "undefined") {
+            status.textContent =
+                "QR generator library could not load. Check your internet connection and refresh the page.";
+            return;
+        }
+
+        qrContainer.innerHTML = "";
+        downloadBtn.style.display = "none";
+        placeholder.style.display = "none";
+
+        qrInstance = new QRCode(qrContainer, {
+            text: text,
+            width: 200,
+            height: 200,
+            colorDark: "#111827",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+
+        status.textContent = "QR code generated successfully!";
+
+        setTimeout(function () {
+            const canvas = qrContainer.querySelector("canvas");
+            const image = qrContainer.querySelector("img");
+            let imageURL = "";
+
+            if (canvas) {
+                imageURL = canvas.toDataURL("image/png");
+            } else if (image && image.src) {
+                imageURL = image.src;
+            }
+
+            if (imageURL) {
+                downloadBtn.href = imageURL;
+                downloadBtn.style.display = "block";
+            } else {
+                status.textContent =
+                    "QR code created, but download is not ready. Please try again.";
+            }
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
