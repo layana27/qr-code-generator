@@ -215,8 +215,9 @@
         <h2>QR Code Generator</h2>
     </div>
 
-    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
-</header>
+    <form action="{{ url_for('logout') }}" method="POST">
+    <button type="submit" class="logout">Logout</button>
+</form>
 
 <main class="container">
 
