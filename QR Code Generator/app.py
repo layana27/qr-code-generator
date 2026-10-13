@@ -28,7 +28,7 @@ def init_db():
     """)
     connection.commit()
     connection.close()
-
+init_db()
 
 def login_required(route):
     @wraps(route)
